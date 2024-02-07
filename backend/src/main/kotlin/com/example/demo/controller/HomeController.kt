@@ -5,8 +5,8 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 class HomeController {
-    @GetMapping("/")
-    fun home(): String {
-        return "Hello world"
-    }
+//    @GetMapping("/")
+//    fun home(): String {
+//        return "Hello world"
+//    }
 }

@@ -1,5 +1,7 @@
 package com.example.demo.controller
 
+import io.swagger.v3.oas.annotations.Operation
+import io.swagger.v3.oas.annotations.tags.Tag
 import net.coobird.thumbnailator.Thumbnails
 import org.apache.pdfbox.pdmodel.PDDocument
 import org.apache.pdfbox.rendering.PDFRenderer
@@ -17,10 +19,12 @@ import java.awt.image.BufferedImage
 import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
 
+@Tag(name = "Thumbnail API", description = "Generate Thumbnail...")
 @RestController
 @RequestMapping("/thumbnail")
 class ThumbnailController {
 
+    @Operation(summary = "Generate PPT", description = "Generate PPT...")
     @PostMapping("/ppt", produces = [MediaType.IMAGE_PNG_VALUE])
     fun generatePptThumbnail(@RequestBody param: MultipartFile): ResponseEntity<ByteArray> {
         println(" === start api === ")
@@ -44,6 +48,7 @@ class ThumbnailController {
         }
     }
 
+    @Operation(summary = "Generate PDF", description = "Generate PDF...")
     @PostMapping("/pdf", produces = [MediaType.IMAGE_PNG_VALUE])
     fun generatePdfThumbnail(@RequestBody param: MultipartFile): ResponseEntity<ByteArray> {
         println(" === start api === ")

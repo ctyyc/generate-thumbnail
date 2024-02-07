@@ -9,3 +9,17 @@ spring:
     multipart:
       max-file-size: 10MB
       max-request-size: 10MB
+
+springdoc:
+  version: '@springdoc.version@'
+  #  packages-to-scan: 'com.kopring'
+  api-docs:
+    version: openapi_3_1
+    path: /v1/swagger/api-docs
+  swagger-ui:
+    path: /swagger/swagger-ui.html
+    display-request-duration: true
+    groups-order: DESC
+    operationsSorter: method
+    disable-swagger-default-url: true
+    use-root-path: true
