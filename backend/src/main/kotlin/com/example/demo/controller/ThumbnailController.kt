@@ -21,16 +21,15 @@ import java.io.ByteArrayOutputStream
 
 @Tag(name = "Thumbnail API", description = "Generate Thumbnail...")
 @RestController
-@RequestMapping("/thumbnail")
+@RequestMapping("/api/v1/thumbnail")
 class ThumbnailController {
 
     @Operation(summary = "Generate PPT", description = "Generate PPT...")
-    @PostMapping("/ppt", produces = [MediaType.IMAGE_PNG_VALUE])
-    fun generatePptThumbnail(@RequestBody param: MultipartFile): ResponseEntity<ByteArray> {
-        println(" === start api === ")
+    @PostMapping("/ppt", consumes = [MediaType.MULTIPART_FORM_DATA_VALUE], produces = [MediaType.IMAGE_PNG_VALUE])
+    fun generatePptThumbnail(@RequestBody pptFile: MultipartFile): ResponseEntity<ByteArray> {
         try {
             // Load PPT file into XMLSlideShow
-            val inputStream = ByteArrayInputStream(param.bytes)
+            val inputStream = ByteArrayInputStream(pptFile.bytes)
             val ppt = XMLSlideShow(inputStream)
 
             // Get the first slide's image
@@ -49,11 +48,10 @@ class ThumbnailController {
     }
 
     @Operation(summary = "Generate PDF", description = "Generate PDF...")
-    @PostMapping("/pdf", produces = [MediaType.IMAGE_PNG_VALUE])
-    fun generatePdfThumbnail(@RequestBody param: MultipartFile): ResponseEntity<ByteArray> {
-        println(" === start api === ")
+    @PostMapping("/pdf", consumes = [MediaType.MULTIPART_FORM_DATA_VALUE], produces = [MediaType.IMAGE_PNG_VALUE])
+    fun generatePdfThumbnail(@RequestBody pdfFile: MultipartFile): ResponseEntity<ByteArray> {
         try {
-            val inputStream = ByteArrayInputStream(param.bytes)
+            val inputStream = ByteArrayInputStream(pdfFile.bytes)
             val document = PDDocument.load(inputStream)
             val renderer = PDFRenderer(document)
 

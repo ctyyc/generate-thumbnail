@@ -30,6 +30,8 @@ dependencies {
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
 
 	implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.3.0")
+	implementation("org.springdoc:springdoc-openapi-starter-webmvc-api:2.3.0")
+	implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.16.0")
 
 	// Apache POI dependencies
 	implementation("org.apache.poi:poi:5.2.3")

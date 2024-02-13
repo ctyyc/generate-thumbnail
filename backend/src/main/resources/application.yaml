@@ -11,15 +11,15 @@ spring:
       max-request-size: 10MB
 
 springdoc:
-  version: '@springdoc.version@'
-  #  packages-to-scan: 'com.kopring'
+  packages-to-scan: com.example.demo
+  paths-to-match: /api/**
   api-docs:
     version: openapi_3_1
-    path: /v1/swagger/api-docs
+    path: /swagger/api-docs
   swagger-ui:
     path: /swagger/swagger-ui.html
     display-request-duration: true
-    groups-order: DESC
-    operationsSorter: method
+    operations-sorter: alpha
+    tags-sorter: alpha
     disable-swagger-default-url: true
     use-root-path: true
