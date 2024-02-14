@@ -47,8 +47,14 @@ jobs:
           password: ${{ secrets.SERVER_PASSWORD }}
           port: 2200
           script: |
-            lsof -t -i:9000 | xargs kill
-        # pkill -f "java -jar kopring-thumbnail.jar"
+            port=9000
+            pid=$(netstat -tlnp | grep ":$port" | awk '{print $7}' | cut -d'/' -f1)
+            if [ ! -z "$pid" ]; then
+              kill $pid
+            fi
+            
+      # lsof -t -i:9000 | xargs kill
+      # pkill -f "java -jar kopring-thumbnail.jar"
         
       # Runs a set of commands using the runners shell
       # - name: Deploy to Ubuntu Server
