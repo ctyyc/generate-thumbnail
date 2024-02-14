@@ -34,8 +34,7 @@ jobs:
           username: ${{ secrets.SERVER_USERNAME }}
           password: ${{ secrets.SERVER_PASSWORD }}
           target: "/workspace/test-deploy"
-          source: "./build/libs/*"
-          rm: true
+          source: "./build/libs/"
 
       # - name: SSH Remote Commands
       #   uses: appleboy/ssh-action@v1.0.3
