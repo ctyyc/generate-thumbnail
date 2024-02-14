@@ -37,12 +37,33 @@ jobs:
         run: chmod +x gradlew
         
       - name: Build with Gradle
-        run: ./gradlew build -x test
+        run: ./gradlew clean bootJar -x test
+
+      - name: Stop previous app
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USERNAME }}
+          password: ${{ secrets.SERVER_PASSWORD }}
+          port: 2200
+          script: |
+            pkill -f "java -jar kopring-thumbnail.jar"
         
       # Runs a set of commands using the runners shell
+      # - name: Deploy to Ubuntu Server
+      #   run: |
+      #     sudo apt-get update
+      #     sudo apt-get install -y sshpass
+      #     sshpass -p ${{ secrets.SERVER_PASSWORD }} scp -r /backend sqnt@${{ secrets.SERVER_HOST }}:/workspace/action-test
+      #     sshpass -p ${{ secrets.SERVER_PASSWORD }} ssh sqnt@${{ secrets.SERVER_HOST }} 'cd /workspace/action-test && ./gradlew bootJar'
       - name: Deploy to Ubuntu Server
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y sshpass
-          sshpass -p ${{ secrets.SERVER_PASSWORD }} scp -r /backend sqnt@${{ secrets.SERVER_HOST }}:/workspace/action-test
-          sshpass -p ${{ secrets.SERVER_PASSWORD }} ssh sqnt@${{ secrets.SERVER_HOST }} 'cd /workspace/action-test && ./gradlew bootJar'
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USERNAME }}
+          password: ${{ secrets.SERVER_PASSWORD }}
+          port: 2200
+          script: |
+            cd /workspace/git/generate-thumbnail
+            git pull origin main
+            java -jar /workspace/git/generate-thumbnail/build/libs/kopring-thumbnail.jar &
