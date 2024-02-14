@@ -1,32 +1,19 @@
-# This is a basic workflow to help you get started with Actions
-
 name: Deploy to Ubuntu Server
 
-# Controls when the workflow will run
 on:
-  # Triggers the workflow on push or pull request events but only for the "main" branch
   push:
     branches: [ "main" ]
   pull_request:
     branches: [ "main" ]
 
-  # Allows you to run this workflow manually from the Actions tab
-  # workflow_dispatch:
-
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "build"
   deploy:
-    # The type of runner that the job will run on
     runs-on: ubuntu-latest
 
-    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - name: Checkout code
         uses: actions/checkout@v4
 
-      # Runs a single command using the runners shell
       - name: Set up JDK
         uses: actions/setup-java@v4
         with:
@@ -37,40 +24,41 @@ jobs:
         run: chmod +x gradlew
         
       - name: Build with Gradle
-        run: ./gradlew clean bootJar -x test
+        run: ./gradlew bootJar -x test
 
-      - name: Stop previous app
-        uses: appleboy/ssh-action@master
+      - name: Copy build directory to server
+        uses: appleboy/scp-action@master
         with:
           host: ${{ secrets.SERVER_HOST }}
           username: ${{ secrets.SERVER_USERNAME }}
           password: ${{ secrets.SERVER_PASSWORD }}
           port: 2200
-          script: |
-            port=9000
-            pid=$(netstat -tlnp | grep ":$port" | awk '{print $7}' | cut -d'/' -f1)
-            if [ ! -z "$pid" ]; then
-              kill $pid
-            fi
-            
-      # lsof -t -i:9000 | xargs kill
-      # pkill -f "java -jar kopring-thumbnail.jar"
-        
-      # Runs a set of commands using the runners shell
+          source: "./build/*"
+          target: "/workspace/test-deploy"
+          script: echo "success copy!!!"
+
+      # - name: Stop previous app
+      #   uses: appleboy/ssh-action@master
+      #   with:
+      #     host: ${{ secrets.SERVER_HOST }}
+      #     username: ${{ secrets.SERVER_USERNAME }}
+      #     password: ${{ secrets.SERVER_PASSWORD }}
+      #     port: 2200
+      #     script: |
+      #       port=9000
+      #       pid=$(netstat -tlnp | grep ":$port" | awk '{print $7}' | cut -d'/' -f1)
+      #       if [ ! -z "$pid" ]; then
+      #         kill $pid
+      #       fi
+
       # - name: Deploy to Ubuntu Server
-      #   run: |
-      #     sudo apt-get update
-      #     sudo apt-get install -y sshpass
-      #     sshpass -p ${{ secrets.SERVER_PASSWORD }} scp -r /backend sqnt@${{ secrets.SERVER_HOST }}:/workspace/action-test
-      #     sshpass -p ${{ secrets.SERVER_PASSWORD }} ssh sqnt@${{ secrets.SERVER_HOST }} 'cd /workspace/action-test && ./gradlew bootJar'
-      - name: Deploy to Ubuntu Server
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.SERVER_HOST }}
-          username: ${{ secrets.SERVER_USERNAME }}
-          password: ${{ secrets.SERVER_PASSWORD }}
-          port: 2200
-          script: |
-            cd /workspace/git/generate-thumbnail
-            git pull origin main
-            java -jar /workspace/git/generate-thumbnail/build/libs/kopring-thumbnail.jar &
+      #   uses: appleboy/ssh-action@master
+      #   with:
+      #     host: ${{ secrets.SERVER_HOST }}
+      #     username: ${{ secrets.SERVER_USERNAME }}
+      #     password: ${{ secrets.SERVER_PASSWORD }}
+      #     port: 2200
+      #     script: |
+      #       cd /workspace/git/generate-thumbnail
+      #       git pull origin main
+      #       java -jar /workspace/git/generate-thumbnail/build/libs/kopring-thumbnail.jar &
