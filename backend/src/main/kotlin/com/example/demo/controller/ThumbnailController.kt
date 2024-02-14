@@ -9,6 +9,7 @@ import org.apache.poi.xslf.usermodel.XMLSlideShow
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
+import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
@@ -23,6 +24,12 @@ import java.io.ByteArrayOutputStream
 @RestController
 @RequestMapping("/api/v1/thumbnail")
 class ThumbnailController {
+
+    @Operation(summary = "test", description = "test...")
+    @GetMapping("")
+    fun test(): ResponseEntity<Any> {
+        return ResponseEntity(HttpStatus.OK)
+    }
 
     @Operation(summary = "Generate PPT", description = "Generate PPT...")
     @PostMapping("/ppt", consumes = [MediaType.MULTIPART_FORM_DATA_VALUE], produces = [MediaType.IMAGE_PNG_VALUE])
