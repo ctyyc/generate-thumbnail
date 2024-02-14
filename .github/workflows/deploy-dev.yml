@@ -30,35 +30,18 @@ jobs:
         uses: appleboy/scp-action@master
         with:
           host: ${{ secrets.SERVER_HOST }}
+          port: 2200
           username: ${{ secrets.SERVER_USERNAME }}
           password: ${{ secrets.SERVER_PASSWORD }}
-          port: 2200
-          source: "./build/*"
+          source: "./build/libs/"
           target: "/workspace/test-deploy"
-          script: echo "success copy!!!"
 
-      # - name: Stop previous app
-      #   uses: appleboy/ssh-action@master
+      # - name: SSH Remote Commands
+      #   uses: appleboy/ssh-action@v1.0.3
       #   with:
       #     host: ${{ secrets.SERVER_HOST }}
+      #     port: 2200
       #     username: ${{ secrets.SERVER_USERNAME }}
       #     password: ${{ secrets.SERVER_PASSWORD }}
-      #     port: 2200
-      #     script: |
-      #       port=9000
-      #       pid=$(netstat -tlnp | grep ":$port" | awk '{print $7}' | cut -d'/' -f1)
-      #       if [ ! -z "$pid" ]; then
-      #         kill $pid
-      #       fi
-
-      # - name: Deploy to Ubuntu Server
-      #   uses: appleboy/ssh-action@master
-      #   with:
-      #     host: ${{ secrets.SERVER_HOST }}
-      #     username: ${{ secrets.SERVER_USERNAME }}
-      #     password: ${{ secrets.SERVER_PASSWORD }}
-      #     port: 2200
-      #     script: |
-      #       cd /workspace/git/generate-thumbnail
-      #       git pull origin main
-      #       java -jar /workspace/git/generate-thumbnail/build/libs/kopring-thumbnail.jar &
+      #     script: # optional
+          
