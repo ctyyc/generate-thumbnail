@@ -33,7 +33,7 @@ jobs:
           port: 2200
           username: ${{ secrets.SERVER_USERNAME }}
           password: ${{ secrets.SERVER_PASSWORD }}
-          source: "./build/libs/"
+          source: "/build/libs/*"
           target: "/workspace/test-deploy"
 
       # - name: SSH Remote Commands
