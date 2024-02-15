@@ -22,10 +22,12 @@ jobs:
           distribution: 'temurin'
 
       - name: Make Gradlew Executable
-        run: chmod +x gradlew
+        run: chmod +x backend/gradlew
+        # run: chmod +x gradlew
         
       - name: Build with Gradle
-        run: ./gradlew bootJar -x test
+        run: cd backend && ./gradlew bootJar -x test
+        # run: ./gradlew bootJar -x test
 
       - name: Copy build directory to server
         uses: appleboy/scp-action@master
@@ -35,7 +37,7 @@ jobs:
           username: ${{ secrets.SERVER_USERNAME }}
           password: ${{ secrets.SERVER_PASSWORD }}
           target: "/workspace/test-deploy"
-          source: "./build/libs/"
+          source: "./backend/build/libs/"
 
       - name: SSH Remote Commands
         uses: appleboy/ssh-action@master
